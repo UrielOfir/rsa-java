@@ -2,14 +2,25 @@ import java.math.BigInteger;
 
 public class RSA {
 
+    // Method to check if a number is prime
+    public boolean isPrime(int num) {
+        if (num < 2) return false;
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
+
     // Method to check that e is a proper parameter for a public key given p and q
     public int checkPublicKey(int p, int q, int e) {
+        if (!isPrime(p) || !isPrime(q)) return -1;
         BigInteger phi = BigInteger.valueOf(p - 1).multiply(BigInteger.valueOf(q - 1));
         return (BigInteger.valueOf(e).gcd(phi).equals(BigInteger.ONE)) ? 1 : 0;
     }
 
     // Method to calculate the parameter d of the private key given p, q, e
     public int calculatePrivateKey(int p, int q, int e) {
+        if (!isPrime(p) || !isPrime(q)) return -1;
         BigInteger phi = BigInteger.valueOf(p - 1).multiply(BigInteger.valueOf(q - 1));
         BigInteger d = BigInteger.valueOf(e).modInverse(phi);
         return d.intValue();
